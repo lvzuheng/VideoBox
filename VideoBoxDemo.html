@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<script type="text/javascript" src="js/VideoBox.js" ></script>
+	<script type="text/javascript" src="js/jwplayer.js" ></script>
+	<script>jwplayer.key="iP+vLYU9H5KyhZeGt5eVuJJIoULUjltoaMeHXg==";</script> 
+	<script>
+		function init(){
+			var setting ={
+				file:"rtmp://live.hkstv.hk.lxdns.com/live/hks",
+				autoplay:true,
+				moveable:true
+			}
+		var div = 	VideoBox("div",setting);
+	
+		}
+		function newVideoBox(){
+			var idsetting ={
+				file:"http://vjs.zencdn.net/v/oceans.mp4",
+				autoplay:true,
+				moveable:true
+			}
+			var div = VideoBox(null,idsetting);
+		}
+	</script>
+	<body onload="init()">
+		<div id="div" style="height: 300px; width: 400px;"></div>
+		<button style="margin-top: 200px;" onclick="newVideoBox()">生成新窗口</button>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script type="text/javascript" src="js/VideoMax.js"></script>
+	<script type="text/javascript" src="js/jwplayer.js"></script>
+	<script>
+		jwplayer.key = "iP+vLYU9H5KyhZeGt5eVuJJIoULUjltoaMeHXg==";
+	</script>
+	<script type="text/javascript" src="js/Frame/jquery-1.11.3.min.js" ></script>
+	<script>
+		var vm;
+
+		function init() {
+			vm = VideoMax("parent_div", 1);
+
+			vm.setOnClosePlay(function(e) {
+				var ip = document.getElementById("input_ip");
+				var uId = document.getElementById("input_userId");
+				$.ajax({
+					type: "get",
+					url: "http://" + ip.value + ":8080/DSJ/video/VideoOper",
+					async: false,
+					data: { terminalId:e, type: 0 },
+					success: function(result) {
+						var obj = JSON.parse(JSON.stringify(result));
+					},
+					error: function(result) {
+						alert("错误：" + JSON.stringify(result));
+						return null;
+					}
+				});
+			})
+		}
+
+		function onclick_btn() {
+			var ip = document.getElementById("input_ip");
+			var uId = document.getElementById("input_userId");
+			if(ip.value != null && uId.value != null) {
+				$.ajax({
+					type: "get",
+					url: "http://" + ip.value + ":8080/DSJ/video/VideoOper",
+					async: false,
+					data: {terminalId:uId.value,type:1},
+					success: function(result) {
+						var obj =JSON.parse(result);
+						console.log(obj.url);
+						var setting = {
+							file:obj.url,
+							autostart:true
+						}
+						vm.makePlay(setting, uId.value);
+					},
+					error: function(result) {
+						console.log("错误：" + JSON.stringify(result));
+						return null;
+					}
+				});
+			}
+		}
+
+		function onstop_btn() {}
+
+		function onclick_btn_clear() {
+			vm.clear();
+		}
+
+		function select_onchange() {
+			vm.clear();
+			var selectObj = document.getElementById("select"); //定位id
+			var index = selectObj.selectedIndex; // 选中索引
+			var text = selectObj.options[index].text; // 选中文本
+			var value = selectObj.options[index].value; // 选中值
+			console.log(value);
+			vm = VideoMax("parent_div", value);
+		}
+	</script>
+
+	<body onload="init()" style="width: 98%; height: 96%;">
+		<select id="select" onchange="select_onchange()">
+			<option>1</section>
+				<option>4</section>
+					<option>9</section>
+						<option>16</section>
+		</select>
+		<input id="input_ip" type="text" placeholder="请求服务器ip"  value="10.20.175.147"/>
+		<input id="input_userId" type="text" placeholder="用户号" value="000001"/>
+		<button onclick="onclick_btn()">播放</button>
+		<button onclick="onstop_btn()">停止</button>
+		<button onclick="onclick_btn_clear()">清除</button>
+		<div id="parent_div" style="height: 96%; width: 100%; background:wheat;"></div>
+	</body>
+
+</html>
